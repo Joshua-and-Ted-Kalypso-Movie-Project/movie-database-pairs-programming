@@ -53,7 +53,7 @@ function onSuccess(data, status) {
             $('#editYear').val(allMovies[editID].year)
             $('#editPlot').val(allMovies[editID].plot)
             $('#editRatingNumber').val(allMovies[editID].rating)
-
+            $('#editID').val(editID + 1)
     })
 }
 
@@ -103,4 +103,19 @@ $.post("https://ruddy-enchanting-grasshopper.glitch.me/movies", {
 $("#add-movie").click(function(e) {
     e.preventDefault();
     addMovie();
+})
+
+$('#saveChanges').click(function(e) {
+    e.preventDefault();
+    console.log("I'm firing from save change");
+    let movieObj = {
+    actors: $('#editActors').val(),
+    directors: $('#editDirectors').val(),
+    title: $('#editTitle').val(),
+    year: $('#editYear').val(),
+    plot: $('#editPlot').val(),
+    rating: $('#editRatingNumber').val(),
+    id: $('#editID').val()
+    }
+    fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $('#editID').val(), {method: 'PUT', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(movieObj),}).then(response => console.log(response)).catch(error => console.log(error))
 })
