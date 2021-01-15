@@ -1,26 +1,69 @@
+let allMovies
+
 function onSuccess(data, status) {
-    console.log(data)
-    console.log(status)
-    $('#loading').addClass('hidden')
+
+    console.log(data);
+    console.log(status);
+    allMovies = data;
     $('#target').html(
-    function() {
-          let html
-        for (let i = 0; i < data.length; i++) {
-        html += `<div class="card col-4">
+        function () {
+            let html
+            for (let i = 0; i < data.length; i++) {
+                html += `<div class="card col-4">
         <div class="text-center">
-        <img class="card-img-top poster"" src=${data[i].poster}"><br>
-        <h3 class="card-title">${data[i].title.toUpperCase()}</h3>${data[i].year}</div>
+        <img class="card-img-top poster" src="${data[i].poster}"><br>
+        <h3 class="card-title">${data[i].title.toUpperCase()} - 
+        <span class="text-muted"> ${data[i].year} </span></h3>
+                <img class="rating" src="img/${data[i].rating}stars.jpg"> 
+        </div>
         <div class="card-text"><p class="">${data[i].plot}</p>
-        <h5 class="">${data[i].rating} / 5 stars</h5> 
+ 
         <p>Starring: ${data[i].actors}</p>
         <p>Directed by: ${data[i].director}</p>
         </div>
-        <div class="row"><button class="edit btn btn-primary col-5 m-1" id="edit${i}">Edit</button><button class="delete btn btn-primary col-5 m-1" id="delete${i}"}">Delete</button></div>
-        </div>`}
-        return html})
-    }
+        <div class="d-flex justify-content-around row"><button class="edit btn btn-primary col-5 m-1" id="edit${data[i].id}" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button><button class="delete btn btn-primary col-5 m-1" id="delete${data[i].id}" data-bs-toggle="modal" data-bs-target="#editModal">Delete</button></div>
+        </div>`
+            }
+            return html
+        })
 
+    $(".delete").click(function (e) {
+        e.preventDefault()
+        if (confirm("Are you sure you want to delete?")) {
+            console.log($(this)[0].id.toString().slice(6, $(this)[0].id.length))
+            fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
+                console.log(response);
+            })
+        } else {
+            console.log("Aborted delete");
+        }
+        // console.log($(this)[0].id.toString().slice(6, $(this)[0].id.length))
+        // fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
+        //     console.log(response);
+        // })
+    })
+        $(".edit").click(function (e) {
+            e.preventDefault()
+            console.log($(this)[0].id.toString().slice(4, $(this)[0].id.length))
+            let editID = ($(this)[0].id.toString().slice(4, $(this)[0].id.length))-1
+            $('#modal-title').html("Editing: " + (allMovies[editID].title).toUpperCase())
+            $('#editActors').val(allMovies[editID].actors)
+            $('#editDirectors').val(allMovies[editID].director)
+            $('#editTitle').val(allMovies[editID].title)
+            $('#editYear').val(allMovies[editID].year)
+            $('#editPlot').val(allMovies[editID].plot)
+            $('#editRatingNumber').val(allMovies[editID].rating)
 
+    })
+}
+
+// const deleteMethod = {
+//     method: 'DELETE'
+//     }
+//
+// //
+// fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(4,$(this)[0].id.length), {method: 'DELETE'}).then(function (response){
+//     console.log(response);
 
 
     //console.log(`Hello, ${name.toUpperCase()}!`); // Hello, CODEUP!
@@ -34,7 +77,7 @@ function onFail(status, error) {
 }
 
 function stopLoadingAnimation() {
-    // the request is no longer pending, hide the loading spinner
+    $('.loading').addClass('d-none')// the request is no longer pending, hide the loading spinner
 }
 
 $.get("https://ruddy-enchanting-grasshopper.glitch.me/movies")
@@ -60,5 +103,4 @@ $.post("https://ruddy-enchanting-grasshopper.glitch.me/movies", {
 $("#add-movie").click(function(e) {
     e.preventDefault();
     addMovie();
-});
-
+})

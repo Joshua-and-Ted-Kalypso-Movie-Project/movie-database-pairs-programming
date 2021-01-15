@@ -12,14 +12,22 @@
 </head>
 <body>
 <h1>Movies</h1>
-    <div id="loading" class="">Loading...
+<section class="loading text-center">
+    <span class="loading__anim"></span>
+</section>
 
-    </div>
 <div id="target" class="row"></div>
 
     <div>
         <input id="movie-title" type="text" placeholder="title">
-        <input id="movie-rating" type="number" placeholder="rating">
+        <select id="movie-rating" placeholder="rating">
+            <option selected>Pick a rating</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
         <button id="add-movie">Add Movie!</button>
         <br>
         <br>
@@ -28,6 +36,38 @@
 
 
 <div id="content">
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="editTitle" type="text" placeholder="Title">
+                <input id="editYear" type="number" placeholder="Year">
+<!--                <select id="editRating" placeholder="rating">-->
+<!--                <option selected>Pick a rating</option>-->
+<!--                <option>1</option>-->
+<!--                <option>2</option>-->
+<!--                <option>3</option>-->
+<!--                <option>4</option>-->
+<!--                    <option>5</option></select>-->
+                <input id="editRatingNumber" type="number" placeholder="Stars">
+                <input id="editActors" type="text" placeholder="Actors" class="col-12">
+                <input id="editDirectors" type="text" placeholder="Director" class="col-12">
+                <textarea id="editPlot" type="textarea" class="col-12" rows="3" placeholder="Plot synopsis">Plot synopsis</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
