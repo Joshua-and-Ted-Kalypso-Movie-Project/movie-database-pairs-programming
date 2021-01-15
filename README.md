@@ -1,6 +1,6 @@
 # Open Movie Databse
 
-This will link to our 'server' at https://glitch.com/dusty-little-cacao/movies
+This will link to our 'server' at https://ruddy-enchanting-grasshopper.glitch.me/movies
 
 Specification
 
