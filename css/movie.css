@@ -1,10 +1,10 @@
 .poster {
-    width: 275px;
-    height: 408px;
+    /*max-width: 275px;*/
+    /*max-height: 408px;*/
 }
 
 .rating {
-    width: 135px;
+    max-width: 135px;
 }
 
 .card {

@@ -10,12 +10,13 @@ function onSuccess(data, status) {
         function () {
             let html = ""
             for (let i = 0; i < data.length; i++) {
-                html += `<div class="card col-2 m-2">
+                if(data[i].poster === undefined) {data[i].poster = "img/no_poster.png"}
+                html += `<div class="card col-2 p-2 my-2">
         <div class="text-center card-top">
-        <img class="card-img-top poster" src="${data[i].poster}"><br>
+        <img class="card-img-top poster ratio ratio-4x3" src="${data[i].poster}"><br>
         <h3 class="card-title">${data[i].title.toUpperCase()} - 
         <span class="text-muted"> ${data[i].year} </span></h3>
-                <img class="rating" src="img/${data[i].rating}stars.jpg"> 
+                <img class="rating card-img-top" src="img/${data[i].rating}stars.jpg"> 
         </div>
         <div class="card-bottom"><div class="card-text"><p class="">${data[i].plot}</p>
  
@@ -34,8 +35,9 @@ function onSuccess(data, status) {
     })
     $(".delete").click(function (e) {
         e.preventDefault()
+        let source = $(this).parent().parent().parent()
         if (confirm("Are you sure you want to delete?")) {
-            console.log($(this)[0].id.toString().slice(6, $(this)[0].id.length))
+            source.slideToggle(1000)
             fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
                 console.log(response);
             })
@@ -108,31 +110,105 @@ $(document).ready(function() {
 // })
 // }
 
-// $("#add-movie").click(function(e) {
-//     e.preventDefault();
-//     // addMovie();
-//     $('#addID').val(allMovies[allMovies.length-1].id+1)
-// })
+$("#add-movie").click(function(e) {
+    e.preventDefault();
+    $('#addID').val(parseInt(allMovies[allMovies.length-1].id)+1)
+})
 
 $("#addMovie").click(function(e) {
     e.preventDefault()
     $(this).disabled = true
-    console.log("I'm firing from addMovie on the add-modal!");
-    $.post("https://ruddy-enchanting-grasshopper.glitch.me/movies", {
-            actors: $('#addActors').val(),
-            director: $('#addDirectors').val(),
-            title: $('#addTitle').val(),
-            year: $('#addYear').val(),
-            plot: $('#addPlot').val(),
-            rating: $('#addRatingNumber').val(),
-            id: $('#addID').val(),
-            genre: $('#addGenres').val(),
-            poster: $('#addPosterURL').val(),
-            }).then(response => {
+    let movieObj = {
+        actors: $('#addActors').val(),
+        director: $('#addDirectors').val(),
+        title: $('#addTitle').val(),
+        year: $('#addYear').val(),
+        plot: $('#addPlot').val(),
+        rating: $('#addRatingNumber').val(),
+        id: $('#addID').val(),
+        genre: $('#addGenres').val(),
+        poster: $('#addPosterURL').val(),
+    }
+    console.log(movieObj);
+    $('#addActors').val("")
+    $('#addDirectors').val("")
+    $('#addTitle').val("")
+    $('#addYear').val("")
+    $('#addPlot').val("")
+    $('#addRatingNumber').val("")
+    $('#addID').val("")
+    $('#addGenres').val("")
+    $('#addPosterURL').val("")
+    $('#addsearchResults').children().remove()
+    $("#addPoster").html("")
+    $.post("https://ruddy-enchanting-grasshopper.glitch.me/movies", movieObj).then(response => {
         console.log(response); $(this).disabled = false;
-    }).catch(error => console.log(error))
+        allMovies.push(movieObj)
+        $("#target").append(function () {
+            let html = ""
+                if(movieObj.poster === undefined) {movieObj.poster = "img/no_poster.png"}
+                html += `<div id="id${movieObj.id}" class="card col-2 p-2 my-2">
+        <div class="text-center card-top">
+        <img class="card-img-top poster ratio ratio-4x3" src="${movieObj.poster}"><br>
+        <h3 class="card-title">${movieObj.title.toUpperCase()} - 
+        <span class="text-muted"> ${movieObj.year} </span></h3>
+                <img class="rating card-img-top" src="img/${movieObj.rating}stars.jpg"> 
+        </div>
+        <div class="card-bottom"><div class="card-text"><p class="">${movieObj.plot}</p>
+ 
+        <p>Starring: ${movieObj.actors}</p>
+        <p>Directed by: ${movieObj.director}</p>
+        </div>
+        <div class="d-flex justify-content-around row"><button class="edit btn btn-primary col-5 m-1" id="edit${allMovies.length-1}" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button><button class="delete btn btn-primary col-5 m-1" id="delete${movieObj.id}">Delete</button></div></div>
+        </div>`
 
-})
+            return html
+
+
+        })
+        $("#target").children().last().children().last().hide()
+        $("#target").children().last().children().first().click(function() {
+            // $(this).parent().toggleClass("col-4").toggleClass("col-2");
+            $(this).next().slideToggle(1000)
+        })
+        $("#target").children().last().children().last().children().last().children().last().click(function (e) {
+                e.preventDefault()
+            let source = $(this).parent().parent().parent()
+            console.log(source)
+                if (confirm("Are you sure you want to delete?")) {
+                    source.slideToggle(1000);
+                    console.log($(this)[0].id.toString().slice(6, $(this)[0].id.length))
+                    fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
+                        console.log(response);
+                    })
+                } else {
+                    console.log("Aborted delete");
+                }
+                // console.log($(this)[0].id.toString().slice(6, $(this)[0].id.length))
+                // fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
+                //     console.log(response);
+                // })
+            })
+            $(".edit").click(function (e) {
+                console.log("I'm firing from the newly created edit button!")
+                e.preventDefault()
+                console.log($(this)[0].id.toString())
+                let editID = ($(this)[0].id.toString().slice(4, $(this)[0].id.length))
+                $('#modal-edit-title').html("Editing: " + (allMovies[editID].title).toUpperCase())
+                $('#editActors').val(allMovies[editID].actors)
+                $('#editDirectors').val(allMovies[editID].director)
+                $('#editTitle').val(allMovies[editID].title)
+                $('#editYear').val(allMovies[editID].year)
+                $('#editPlot').val(allMovies[editID].plot)
+                $('#editRatingNumber').val(allMovies[editID].rating)
+                $('#editID').val(allMovies[editID].id)
+                $('#editGenres').val(allMovies[editID].genre)
+                $('#editPoster').html("<img src='" + allMovies[editID].poster + "'>")
+                $('#editPosterURL').val(allMovies[editID].poster)
+            })
+    })
+    })
+
 
 $('#saveChanges').click(function(e) {
     e.preventDefault();
@@ -234,7 +310,11 @@ $("#addCheckOMDB").click(function() {
         console.log(status);
         // searchResults = data;
         for (let i =0; i < data.results.length; i++) {
-            $("#addsearchResults").append("<div id=" + data.results[i].id + ">"+ data.results[i].release_date.toString().slice(0,4) + " <img src='https://image.tmdb.org/t/p/w92" + data.results[i].poster_path + "'> " + data.results[i].original_title + "</div>")
+            let release_date
+            function checkReleaseDate() {
+                if (data.results[i].release_date === undefined) { release_date = "Future Project"} else {release_date = data.results[i].release_date.toString().slice(0,4)}}
+                checkReleaseDate()
+            $("#addsearchResults").append("<div id=" + data.results[i].id + ">"+ release_date + " <img src='https://image.tmdb.org/t/p/w92" + data.results[i].poster_path + "'> " + data.results[i].original_title + "</div>")
         }
         $("#addsearchResults").children().click(function() {
             console.log($(this).attr("id"))
@@ -253,7 +333,7 @@ $("#addCheckOMDB").click(function() {
                 $("#addPosterURL").val("https://image.tmdb.org/t/p/w300" + data.poster_path)
                 $("#addPoster").html("<img src='" + $("#addPosterURL").val() + "'>");
                 $("#addYear").val(data.release_date.toString().slice(0,4))
-            })
+            }).catch(error => console.log(error))
 
             fetch("https://api.themoviedb.org/3/movie/" + $(this).attr("id") + "/credits?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
                 console.log(data);
@@ -276,10 +356,10 @@ $("#addCheckOMDB").click(function() {
                     return directors
                     console.log("The directors I found for this movie are: " + directors)
                 })
-            });
+            })
 
-        }).catch(error => console.log(error))
-    }).catch(error => console.log(error))
+        })
+    })
 
 
 })
