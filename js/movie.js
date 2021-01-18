@@ -1,5 +1,7 @@
 let allMovies
 
+let editClick
+
 var posterModal = new bootstrap.Modal(document.getElementById('posterModal'), {
     keyboard: false})
 
@@ -65,6 +67,7 @@ function onSuccess(data, status) {
             e.preventDefault()
             console.log($(this)[0].id.toString().slice(4, $(this)[0].id.length))
             let editID = ($(this)[0].id.toString().slice(4, $(this)[0].id.length))
+            editClick = $(this)
             $('#modal-edit-title').html("Editing: " + (allMovies[editID].title).toUpperCase())
             $('#editActors').val(allMovies[editID].actors)
             $('#editDirectors').val(allMovies[editID].director)
@@ -212,6 +215,7 @@ $("#addMovie").click(function(e) {
                 e.preventDefault()
                 console.log($(this)[0].id.toString())
                 let editID = ($(this)[0].id.toString().slice(4, $(this)[0].id.length))
+                editClick = $(this)
                 $('#modal-edit-title').html("Editing: " + (allMovies[editID].title).toUpperCase())
                 $('#editActors').val(allMovies[editID].actors)
                 $('#editDirectors').val(allMovies[editID].director)
@@ -244,6 +248,63 @@ $('#saveChanges').click(function(e) {
     poster: $('#editPosterURL').val()
     }
     $(this).disabled = true
+    editClick.parent().parent().parent().html(function() {
+        let html = ""
+
+            if(movieObj.poster === undefined) {movieObj.poster = "img/no_poster.png"}
+            html += `
+        <div class="text-center card-top">
+        <img class="card-img-top poster ratio ratio-4x3" src="${movieObj.poster}"><br>
+        <h3 class="card-title">${movieObj.title} - 
+        <small class="text-muted"> ${movieObj.year} </small></h3>
+                <img class="rating card-img-top" src="img/${movieObj.rating}stars.jpg"> 
+        </div>
+        <div class="card-bottom"><div class="card-text"><p class="">${movieObj.plot}</p>
+ 
+        <p>Starring: ${movieObj.actors}</p>
+        <p>Directed by: ${movieObj.director}</p>
+        </div>
+        <div class="d-flex justify-content-around row">${editClick.parent().html()}</div></div>
+        </div>`
+        return html
+    })
+    $(editClick).parent().parent().hide()
+    $(editClick).parent().parent().prev().click(function() {
+        let thisCardBottom = $(this).next()
+        // $(this).parent().toggleClass("col-4").toggleClass("col-2");
+        $(".card-bottom").not(thisCardBottom).slideUp(500)
+        $(this).next().slideToggle(1000)
+    })
+    $(editClick).click(function (e) {
+        console.log("I'm firing from the newly created edit button!")
+        e.preventDefault()
+        console.log($(this)[0].id.toString())
+        let editID = ($(this)[0].id.toString().slice(4, $(this)[0].id.length))
+        editClick = $(this)
+        $('#modal-edit-title').html("Editing: " + (allMovies[editID].title).toUpperCase())
+        $('#editActors').val(allMovies[editID].actors)
+        $('#editDirectors').val(allMovies[editID].director)
+        $('#editTitle').val(allMovies[editID].title)
+        $('#editYear').val(allMovies[editID].year)
+        $('#editPlot').val(allMovies[editID].plot)
+        $('#editRatingNumber').val(allMovies[editID].rating)
+        $('#editID').val(allMovies[editID].id)
+        $('#editGenres').val(allMovies[editID].genre)
+        $('#editPoster').html("<img src='" + allMovies[editID].poster + "'>")
+        $('#editPosterURL').val(allMovies[editID].poster)
+    })
+    $(editClick).next().click(function (e) {
+        e.preventDefault()
+        let source = $(this).parent().parent().parent()
+        if (confirm("Are you sure you want to delete?")) {
+            source.slideToggle(1000)
+            fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $(this)[0].id.toString().slice(6, $(this)[0].id.length), {method: 'DELETE'}).then(function (response) {
+                console.log(response);
+            })
+        } else {
+            console.log("Aborted delete");
+        }
+    })
     fetch("https://ruddy-enchanting-grasshopper.glitch.me/movies/" + $('#editID').val(), {method: 'PATCH', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(movieObj),}).then(response => {
         console.log(response)
         $(this).disabled = false
