@@ -1,21 +1,24 @@
 let allMovies
 
+var posterModal = new bootstrap.Modal(document.getElementById('posterModal'), {
+    keyboard: false})
+
 function onSuccess(data, status) {
 
     console.log(data);
     console.log(status);
     allMovies = data;
-
+    $("#add-movie").disabled = false
     $('#target').html(
         function () {
             let html = ""
             for (let i = 0; i < data.length; i++) {
                 if(data[i].poster === undefined) {data[i].poster = "img/no_poster.png"}
-                html += `<div class="card col-2 p-2 my-2">
+                html += `<div class="card col-6 col-sm-4 col-md-3 col-lg-2 p-2 my-2">
         <div class="text-center card-top">
         <img class="card-img-top poster ratio ratio-4x3" src="${data[i].poster}"><br>
-        <h3 class="card-title">${data[i].title.toUpperCase()} - 
-        <span class="text-muted"> ${data[i].year} </span></h3>
+        <h3 class="card-title">${data[i].title} - 
+        <small class="text-muted"> ${data[i].year} </small></h3>
                 <img class="rating card-img-top" src="img/${data[i].rating}stars.jpg"> 
         </div>
         <div class="card-bottom"><div class="card-text"><p class="">${data[i].plot}</p>
@@ -30,9 +33,18 @@ function onSuccess(data, status) {
         })
     $(".card-bottom").hide()
     $('.card-top').click(function() {
+        let thisCardBottom = $(this).next()
         // $(this).parent().toggleClass("col-4").toggleClass("col-2");
+        $(".card-bottom").not(thisCardBottom).slideUp(500)
         $(this).next().slideToggle(1000)
     })
+    //     .dblclick(function () {
+    //     posterModal.show()
+    //     let editID =  $(this).next().children().last().children().first().attr("id").toString().slice(4, $(this).next().children().last().children().first().attr("id").toString().length);
+    //     $('#modal-edit-title').html("Check out the Movie Poster for " + (allMovies[editID].title).toUpperCase())
+    //     $('#posterPoster').html("<img class='col-12' src='" + allMovies[editID].poster + "'>")
+    //     // $('#editPosterURL').val(allMovies[editID].poster)
+    // })
     $(".delete").click(function (e) {
         e.preventDefault()
         let source = $(this).parent().parent().parent()
@@ -62,7 +74,7 @@ function onSuccess(data, status) {
             $('#editRatingNumber').val(allMovies[editID].rating)
             $('#editID').val(allMovies[editID].id)
             $('#editGenres').val(allMovies[editID].genre)
-            $('#editPoster').html("<img src='" + allMovies[editID].poster + "'>")
+            $('#editPoster').html("<img class='col-12' src='" + allMovies[editID].poster + "'>")
             $('#editPosterURL').val(allMovies[editID].poster)
     })
 }
@@ -93,10 +105,16 @@ function stopLoadingAnimation() {
 
 
 $(document).ready(function() {
+    $("#add-movie").disabled = true
     $.get("https://ruddy-enchanting-grasshopper.glitch.me/movies")
         .done(onSuccess)
         .fail(onFail)
         .always(stopLoadingAnimation);
+         $('[data-toggle="tooltip"]').tooltip()
+
+
+
+
 })
 
 
@@ -147,7 +165,7 @@ $("#addMovie").click(function(e) {
         $("#target").append(function () {
             let html = ""
                 if(movieObj.poster === undefined) {movieObj.poster = "img/no_poster.png"}
-                html += `<div id="id${movieObj.id}" class="card col-2 p-2 my-2">
+                html += `<div id="id${movieObj.id}" class="card col-6 col-sm-4 col-md-3 col-lg-2 p-2 my-2">
         <div class="text-center card-top">
         <img class="card-img-top poster ratio ratio-4x3" src="${movieObj.poster}"><br>
         <h3 class="card-title">${movieObj.title.toUpperCase()} - 
@@ -232,12 +250,31 @@ $('#saveChanges').click(function(e) {
     }).catch(error => console.log(error))
 })
 
-$("#editClose").click($("#searchResults").children().remove())
+$("#editClose").click(
+    function() {
+    $("#searchResults").children().remove()
+})
 
-$("#addClose").click($("#addsearchResults").children().remove())
+$("#addClose").click(function() {
+    console.log($(this))
+    $("#addsearchResults").children().remove();
+})
+
+$("#previewEditPoster").click(function () {
+    $("#editPoster").html("<img src='" + $("#editPosterURL").val() + "'>")
+})
 
 $("#previewAddPoster").click(function () {
-    $("#addPoster").html("<img src='" + $("#addPosterURL").val() + "'>")
+    $("#addPoster").html("<img class='col-12' src='" + $("#addPosterURL").val() + "'>")
+    console.log("Firing from the poster button!")
+})
+
+$("#editCloseTop").click(function () {
+    $("#searchResults").children().remove()
+})
+
+$("#addCloseTop").click(function () {
+    $("#addsearchResults").children().remove()
 })
 
 // let searchResults
@@ -294,9 +331,9 @@ fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&langua
                     return directors
                     console.log("The directors I found for this movie are: " + directors)
                 })
-            });
-
             }).catch(error => console.log(error))
+
+            })
 }).catch(error => console.log(error))
 
 
@@ -367,3 +404,11 @@ $("#addCheckOMDB").click(function() {
     // https://api.themoviedb.org/3/movie/272?api_key=api-key&language=en-US
 
     // https://api.themoviedb.org/3/movie/<movie id>/credits?api_key=ba6d2ad3567702f5ab135da63fe57a78&language=en-US
+
+// https://api.themoviedb.org/3/movie/<movie ID>/images?api_key=<api key>&language=en-US
+
+// function getImages(movieID) {
+//     fetch("https://api.themoviedb.org/3/movie/" + movieID + "/images?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
+//         console.log(data);
+//     })
+// }

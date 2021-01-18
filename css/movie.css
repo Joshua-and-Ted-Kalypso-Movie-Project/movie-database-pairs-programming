@@ -3,6 +3,11 @@
     /*max-height: 408px;*/
 }
 
+/*#addPoster, #editPoster {*/
+/*    max-width: 400px;*/
+/*    background: blue;*/
+/*}*/
+
 .rating {
     max-width: 135px;
 }
