@@ -248,6 +248,7 @@ $('#saveChanges').click(function(e) {
     poster: $('#editPosterURL').val()
     }
     $(this).disabled = true
+    let topOfCard = editClick.parent().parent().parent()
     editClick.parent().parent().parent().html(function() {
         let html = ""
 
@@ -268,14 +269,14 @@ $('#saveChanges').click(function(e) {
         </div>`
         return html
     })
-    $(editClick).parent().parent().hide()
-    $(editClick).parent().parent().prev().click(function() {
+    // topOfCard.children().first().next().hide() This is copied from above but I don't *really* want to hide what I just changed, do I?
+    topOfCard.children().first().click(function() {
         let thisCardBottom = $(this).next()
         // $(this).parent().toggleClass("col-4").toggleClass("col-2");
         $(".card-bottom").not(thisCardBottom).slideUp(500)
         $(this).next().slideToggle(1000)
     })
-    $(editClick).click(function (e) {
+    topOfCard.children().last().children().children().first().click(function (e) {
         console.log("I'm firing from the newly created edit button!")
         e.preventDefault()
         console.log($(this)[0].id.toString())
@@ -293,7 +294,7 @@ $('#saveChanges').click(function(e) {
         $('#editPoster').html("<img src='" + allMovies[editID].poster + "'>")
         $('#editPosterURL').val(allMovies[editID].poster)
     })
-    $(editClick).next().click(function (e) {
+    topOfCard.children().last().children().children().last().click(function (e) {
         e.preventDefault()
         let source = $(this).parent().parent().parent()
         if (confirm("Are you sure you want to delete?")) {
@@ -349,6 +350,8 @@ fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&langua
     console.log(data);
     console.log(status);
     searchResults = data;
+    if (data.results.length < 1) {
+        $("#searchResults").append("<div><h4>Sorry, there were no matches. If you searched using a year, try removing it, or try a different title.</h4></div>")}
     for (let i =0; i < data.results.length; i++) {
         $("#searchResults").append("<div id=" + data.results[i].id + ">"+ data.results[i].release_date.toString().slice(0,4) + " <img src='https://image.tmdb.org/t/p/w92" + data.results[i].poster_path + "'> " + data.results[i].original_title + "</div>")
     }
@@ -407,6 +410,8 @@ $("#addCheckOMDB").click(function() {
         console.log(data);
         console.log(status);
         // searchResults = data;
+        if (data.results.length < 1) {
+            $("#addsearchResults").append("<div><h4>Sorry, there were no matches. If you searched using a year, try removing it, or try a different title.</h4></div>")}
         for (let i =0; i < data.results.length; i++) {
             let release_date
             function checkReleaseDate() {
