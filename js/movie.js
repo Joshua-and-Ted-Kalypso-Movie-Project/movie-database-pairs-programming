@@ -16,12 +16,13 @@ function onSuccess(data, status) {
             let html = ""
             for (let i = 0; i < data.length; i++) {
                 if(data[i].poster === undefined) {data[i].poster = "img/no_poster.png"}
-                html += `<div class="card col-6 col-sm-4 col-md-3 col-lg-2 p-2 my-2">
+                html += `<div class="card col-6 col-sm-4 col-md-3 col-lg-2 p-2 m-1">
         <div class="text-center card-top">
         <img class="card-img-top poster ratio ratio-4x3" src="${data[i].poster}"><br>
         <h3 class="card-title">${data[i].title} - 
         <small class="text-muted"> ${data[i].year} </small></h3>
-                <img class="rating card-img-top" src="img/${data[i].rating}stars.jpg"> 
+                <img class="card-img-top max-width" src="img/${data[i].rating}stars.jpg">
+
         </div>
         <div class="card-bottom"><div class="card-text"><p class="">${data[i].plot}</p>
  
@@ -36,7 +37,7 @@ function onSuccess(data, status) {
     $(".card-bottom").hide()
     $('.card-top').click(function() {
         let thisCardBottom = $(this).next()
-        // $(this).parent().toggleClass("col-4").toggleClass("col-2");
+        // $(this).parent().toggleClass("col-lg-4").toggleClass("col-lg-2");
         $(".card-bottom").not(thisCardBottom).slideUp(500)
         $(this).next().slideToggle(1000)
     })
@@ -473,8 +474,101 @@ $("#addCheckOMDB").click(function() {
 
 // https://api.themoviedb.org/3/movie/<movie ID>/images?api_key=<api key>&language=en-US
 
-// function getImages(movieID) {
-//     fetch("https://api.themoviedb.org/3/movie/" + movieID + "/images?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
-//         console.log(data);
-//     })
-// }
+function getImages(movieID) {
+    fetch("https://api.themoviedb.org/3/movie/" + movieID + "/images?api_key=" + ombdV4key + "&language=en-US").then(data => {
+        // data.json()).then(data => {
+        console.log(data);
+    })
+}
+
+var starClicked = false;
+
+$(function() {
+
+    $('.star').click(function() {
+
+        $(this).children('.selected').addClass('is-animated');
+        $(this).children('.selected').addClass('pulse');
+
+        var target = this;
+
+        setTimeout(function() {
+            $(target).children('.selected').removeClass('is-animated');
+            $(target).children('.selected').removeClass('pulse');
+        }, 1000);
+
+        starClicked = true;
+    })
+
+    $('.half').click(function() {
+        if (starClicked == true) {
+            setHalfStarState(this)
+        }
+        $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+
+        $(this).closest('.rating').data('vote', $(this).data('value'));
+        calculateAverage()
+        console.log(parseInt($(this).data('value')));
+
+    })
+
+    $('.full').click(function() {
+        if (starClicked == true) {
+            setFullStarState(this)
+        }
+        $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+
+        $(this).find('js-average').text(parseInt($(this).data('value')));
+
+        $(this).closest('.rating').data('vote', $(this).data('value'));
+        calculateAverage()
+
+        console.log(parseInt($(this).data('value')));
+    })
+
+    $('.half').hover(function() {
+        if (starClicked == false) {
+            setHalfStarState(this)
+        }
+
+    })
+
+    $('.full').hover(function() {
+        if (starClicked == false) {
+            setFullStarState(this)
+        }
+    })
+
+})
+
+function updateStarState(target) {
+    $(target).parent().prevAll().addClass('animate');
+    $(target).parent().prevAll().children().addClass('star-colour');
+
+    $(target).parent().nextAll().removeClass('animate');
+    $(target).parent().nextAll().children().removeClass('star-colour');
+}
+
+function setHalfStarState(target) {
+    $(target).addClass('star-colour');
+    $(target).siblings('.full').removeClass('star-colour');
+    updateStarState(target)
+}
+
+function setFullStarState(target) {
+    $(target).addClass('star-colour');
+    $(target).parent().addClass('animate');
+    $(target).siblings('.half').addClass('star-colour');
+
+    updateStarState(target)
+}
+
+function calculateAverage() {
+    var average = 0
+
+    $('.rating').each(function() {
+        average += $(this).data('vote')
+    })
+
+    $('.js-average').text((average/ $('.rating').length).toFixed(1))
+}
