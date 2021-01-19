@@ -22,7 +22,7 @@
 
 #target>div:hover {
     /*width: 20%*/
-    transform: scale(1.2);
+    transform: scale(1.1);
     /*background: blue;*/
 }
 
@@ -67,10 +67,8 @@
 
 .rating {
     text-align: center;
-    max-width: 135px;
     position: relative;
-    width: 50%;
-    float: left;
+    /*float: left;*/
 }
 
 .hidden {
@@ -79,21 +77,21 @@
 
 .star {
     display: inline-block;
-    margin: 5px;
-    font-size: 30px;
-    color: whitesmoke;
+    margin: 1px;
+    font-size: 20px;
+    color: black;
     position: relative;
-&.animate {
+}
+.animate {
      -webkit-animation: stretch-bounce .5s ease-in-out;
  }
 
-&.hidden {
+.hidden {
      opacity: 0;
  }
-}
 
-.full {
-&:before {
+
+.full:before {
      font-family: fontAwesome;
      display: inline-block;
      content: "\f005";
@@ -101,17 +99,16 @@
      float: right;
      z-index: 2;
  }
-}
 
-.half {
-&:before {
+
+.half:before {
      font-family: fontAwesome;
      content: "\f089";
      position: absolute;
      float: left;
      z-index: 3;
  }
-}
+
 
 .star-colour {
     color: #ffd700;
@@ -137,8 +134,7 @@
     }
 }
 
-.selected {
-&:before {
+.selected:before {
      font-family: fontAwesome;
      display: inline-block;
      content: "\f005";
@@ -150,19 +146,16 @@
      z-index: 1;
  }
 
-&.pulse {
-&:before {
+.pulse:before {
      -webkit-transform: scale(3);
      opacity: 0;
  }
-}
 
-&.is-animated {
-&:before {
+
+.is-animated:before {
      transition: 1s ease-out;
  }
-}
-}
+
 
 .score {
     font-family: arial;
