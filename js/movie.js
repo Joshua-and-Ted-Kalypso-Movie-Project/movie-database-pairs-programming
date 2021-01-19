@@ -25,56 +25,56 @@ function onSuccess(data, status) {
             <div class="d-flex justify-content-start">
             <div class="rating col-12" data-vote="0">
 
-          <div class="star hidden">
-            <span class="full"data-value="0"></span>
-            <span class="half"data-value="0"></span>
-          </div>
-        
-          <div class="star">
-        
-            <span class="full" data-value="1"></span>
-            <span class="half" data-value="0.5"></span>
-            <span class="selected"></span>
-        
-          </div>
-        
-          <div class="star">
-        
-            <span class="full" data-value="2"></span>
-            <span class="half" data-value="1.5"></span>
-            <span class="selected"></span>
-        
-          </div>
-        
-          <div class="star">
-        
-            <span class="full" data-value="3"></span>
-            <span class="half" data-value="2.5"></span>
-            <span class="selected"></span>
-        
-          </div>
-        
-          <div class="star">
-        
-            <span class="full" data-value="4"></span>
-            <span class="half" data-value="3.5"></span>
-            <span class="selected"></span>
-        
-          </div>
-        
-          <div class="star">
-        
-            <span class="full" data-value="5"></span>
-            <span class="half" data-value="4.5"></span>
-            <span class="selected"></span>
-        
-          </div>
-        
-          <div class="score">
-            <span class="score-rating js-score">0</span>
-            <span>/</span>
-            <span class="total">5</span>
-          </div>
+<!--          <div class="star hidden">-->
+<!--            <span class="full" data-value="0"></span>-->
+<!--            <span class="half" data-value="0"></span>-->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="star">-->
+<!--        -->
+<!--            <span class="full" data-value="1"></span>-->
+<!--            <span class="half" data-value="0.5"></span>-->
+<!--            <span class="selected"></span>-->
+<!--        -->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="star">-->
+<!--        -->
+<!--            <span class="full" data-value="2"></span>-->
+<!--            <span class="half" data-value="1.5"></span>-->
+<!--            <span class="selected"></span>-->
+<!--        -->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="star">-->
+<!--        -->
+<!--            <span class="full" data-value="3"></span>-->
+<!--            <span class="half" data-value="2.5"></span>-->
+<!--            <span class="selected"></span>-->
+<!--        -->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="star">-->
+<!--        -->
+<!--            <span class="full" data-value="4"></span>-->
+<!--            <span class="half" data-value="3.5"></span>-->
+<!--            <span class="selected"></span>-->
+<!--        -->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="star">-->
+<!--        -->
+<!--            <span class="full" data-value="5"></span>-->
+<!--            <span class="half" data-value="4.5"></span>-->
+<!--            <span class="selected"></span>-->
+<!--        -->
+<!--          </div>-->
+<!--        -->
+<!--          <div class="score">-->
+<!--            <span class="score-rating js-score">0</span>-->
+<!--            <span>/</span>-->
+<!--            <span class="total">5</span>-->
+<!--          </div>-->
         </div>
         </div>
         </div>
@@ -136,6 +136,98 @@ function onSuccess(data, status) {
             $('#editPoster').html("<img class='col-12' src='" + allMovies[editID].poster + "'>")
             $('#editPosterURL').val(allMovies[editID].poster)
     })
+    // This code was to implement animated stars - but we didn't quite get to it
+    // var starClicked = false;
+    //
+    // $(function() {
+    //
+    //     $('.star').click(function() {
+    //
+    //         $(this).children('.selected').addClass('is-animated');
+    //         $(this).children('.selected').addClass('pulse');
+    //
+    //         var target = this;
+    //
+    //         setTimeout(function() {
+    //             $(target).children('.selected').removeClass('is-animated');
+    //             $(target).children('.selected').removeClass('pulse');
+    //         }, 1000);
+    //
+    //         starClicked = true;
+    //     })
+    //
+    //     $('.half').click(function() {
+    //         if (starClicked == true) {
+    //             setHalfStarState(this)
+    //         }
+    //         $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+    //
+    //         $(this).closest('.rating').data('vote', $(this).data('value'));
+    //         calculateAverage()
+    //         console.log(parseInt($(this).data('value')));
+    //
+    //     })
+    //
+    //     $('.full').click(function() {
+    //         if (starClicked == true) {
+    //             setFullStarState(this)
+    //         }
+    //         $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+    //
+    //         $(this).find('js-average').text(parseInt($(this).data('value')));
+    //
+    //         $(this).closest('.rating').data('vote', $(this).data('value'));
+    //         calculateAverage()
+    //
+    //         console.log(parseInt($(this).data('value')));
+    //     })
+    //
+    //     $('.half').hover(function() {
+    //         if (starClicked == false) {
+    //             setHalfStarState(this)
+    //         }
+    //
+    //     })
+    //
+    //     $('.full').hover(function() {
+    //         if (starClicked == false) {
+    //             setFullStarState(this)
+    //         }
+    //     })
+    //
+    // })
+    //
+    // function updateStarState(target) {
+    //     $(target).parent().prevAll().addClass('animate');
+    //     $(target).parent().prevAll().children().addClass('star-colour');
+    //
+    //     $(target).parent().nextAll().removeClass('animate');
+    //     $(target).parent().nextAll().children().removeClass('star-colour');
+    // }
+    //
+    // function setHalfStarState(target) {
+    //     $(target).addClass('star-colour');
+    //     $(target).siblings('.full').removeClass('star-colour');
+    //     updateStarState(target)
+    // }
+    //
+    // function setFullStarState(target) {
+    //     $(target).addClass('star-colour');
+    //     $(target).parent().addClass('animate');
+    //     $(target).siblings('.half').addClass('star-colour');
+    //
+    //     updateStarState(target)
+    // }
+    //
+    // function calculateAverage() {
+    //     var average = 0
+    //
+    //     $('.rating').each(function() {
+    //         average += $(this).data('vote')
+    //     })
+    //
+    //     $('.js-average').text((average/ $('.rating').length).toFixed(1))
+    // }
 }
 
 // const deleteMethod = {
@@ -159,6 +251,7 @@ function onFail(status, error) {
 
 function stopLoadingAnimation() {
     $('.loading').addClass('d-none')// the request is no longer pending, hide the loading spinner
+    $('footer').removeClass('d-none')
 }
 
 
@@ -627,94 +720,94 @@ function getImages(movieID) {
     })
 }
 
-var starClicked = false;
-
-$(function() {
-
-    $('.star').click(function() {
-
-        $(this).children('.selected').addClass('is-animated');
-        $(this).children('.selected').addClass('pulse');
-
-        var target = this;
-
-        setTimeout(function() {
-            $(target).children('.selected').removeClass('is-animated');
-            $(target).children('.selected').removeClass('pulse');
-        }, 1000);
-
-        starClicked = true;
-    })
-
-    $('.half').click(function() {
-        if (starClicked == true) {
-            setHalfStarState(this)
-        }
-        $(this).closest('.rating').find('.js-score').text($(this).data('value'));
-
-        $(this).closest('.rating').data('vote', $(this).data('value'));
-        calculateAverage()
-        console.log(parseInt($(this).data('value')));
-
-    })
-
-    $('.full').click(function() {
-        if (starClicked == true) {
-            setFullStarState(this)
-        }
-        $(this).closest('.rating').find('.js-score').text($(this).data('value'));
-
-        $(this).find('js-average').text(parseInt($(this).data('value')));
-
-        $(this).closest('.rating').data('vote', $(this).data('value'));
-        calculateAverage()
-
-        console.log(parseInt($(this).data('value')));
-    })
-
-    $('.half').hover(function() {
-        if (starClicked == false) {
-            setHalfStarState(this)
-        }
-
-    })
-
-    $('.full').hover(function() {
-        if (starClicked == false) {
-            setFullStarState(this)
-        }
-    })
-
-})
-
-function updateStarState(target) {
-    $(target).parent().prevAll().addClass('animate');
-    $(target).parent().prevAll().children().addClass('star-colour');
-
-    $(target).parent().nextAll().removeClass('animate');
-    $(target).parent().nextAll().children().removeClass('star-colour');
-}
-
-function setHalfStarState(target) {
-    $(target).addClass('star-colour');
-    $(target).siblings('.full').removeClass('star-colour');
-    updateStarState(target)
-}
-
-function setFullStarState(target) {
-    $(target).addClass('star-colour');
-    $(target).parent().addClass('animate');
-    $(target).siblings('.half').addClass('star-colour');
-
-    updateStarState(target)
-}
-
-function calculateAverage() {
-    var average = 0
-
-    $('.rating').each(function() {
-        average += $(this).data('vote')
-    })
-
-    $('.js-average').text((average/ $('.rating').length).toFixed(1))
-}
+// var starClicked = false;
+//
+// $(function() {
+//
+//     $('.star').click(function() {
+//
+//         $(this).children('.selected').addClass('is-animated');
+//         $(this).children('.selected').addClass('pulse');
+//
+//         var target = this;
+//
+//         setTimeout(function() {
+//             $(target).children('.selected').removeClass('is-animated');
+//             $(target).children('.selected').removeClass('pulse');
+//         }, 1000);
+//
+//         starClicked = true;
+//     })
+//
+//     $('.half').click(function() {
+//         if (starClicked == true) {
+//             setHalfStarState(this)
+//         }
+//         $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+//
+//         $(this).closest('.rating').data('vote', $(this).data('value'));
+//         calculateAverage()
+//         console.log(parseInt($(this).data('value')));
+//
+//     })
+//
+//     $('.full').click(function() {
+//         if (starClicked == true) {
+//             setFullStarState(this)
+//         }
+//         $(this).closest('.rating').find('.js-score').text($(this).data('value'));
+//
+//         $(this).find('js-average').text(parseInt($(this).data('value')));
+//
+//         $(this).closest('.rating').data('vote', $(this).data('value'));
+//         calculateAverage()
+//
+//         console.log(parseInt($(this).data('value')));
+//     })
+//
+//     $('.half').hover(function() {
+//         if (starClicked == false) {
+//             setHalfStarState(this)
+//         }
+//
+//     })
+//
+//     $('.full').hover(function() {
+//         if (starClicked == false) {
+//             setFullStarState(this)
+//         }
+//     })
+//
+// })
+//
+// function updateStarState(target) {
+//     $(target).parent().prevAll().addClass('animate');
+//     $(target).parent().prevAll().children().addClass('star-colour');
+//
+//     $(target).parent().nextAll().removeClass('animate');
+//     $(target).parent().nextAll().children().removeClass('star-colour');
+// }
+//
+// function setHalfStarState(target) {
+//     $(target).addClass('star-colour');
+//     $(target).siblings('.full').removeClass('star-colour');
+//     updateStarState(target)
+// }
+//
+// function setFullStarState(target) {
+//     $(target).addClass('star-colour');
+//     $(target).parent().addClass('animate');
+//     $(target).siblings('.half').addClass('star-colour');
+//
+//     updateStarState(target)
+// }
+//
+// function calculateAverage() {
+//     var average = 0
+//
+//     $('.rating').each(function() {
+//         average += $(this).data('vote')
+//     })
+//
+//     $('.js-average').text((average/ $('.rating').length).toFixed(1))
+// }

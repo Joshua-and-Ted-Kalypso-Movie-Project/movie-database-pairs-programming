@@ -137,7 +137,7 @@
 .selected:before {
      font-family: fontAwesome;
      display: inline-block;
-     content: "\f005";
+     content: "/f005";
      position: absolute;
      top: 0;
      left: 0;
@@ -160,7 +160,7 @@
 .score {
     font-family: arial;
     font-size: 20px;
-    color: green;
+    color: black;
     margin-top: 20px;
     margin-left: 50px;
 }
