@@ -498,7 +498,7 @@ $('#saveChanges').click(function(e) {
         <img class="card-img-top poster ratio ratio-4x3" src="${movieObj.poster}"><br>
         <h3 class="card-title">${movieObj.title} - 
         <small class="text-muted"> ${movieObj.year} </small></h3>
-                <img class="rating card-img-top" src="img/${movieObj.rating}stars.jpg"> 
+                <img class="max-width card-img-top" src="img/${movieObj.rating}stars.jpg"> 
         </div>
         <div class="card-bottom"><div class="card-text"><p class="">${movieObj.plot}</p>
  
