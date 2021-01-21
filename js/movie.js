@@ -22,8 +22,8 @@ function onSuccess(data, status) {
         <h3 class="card-title">${data[i].title} - 
         <small class="text-muted"> ${data[i].year} </small></h3>
               <img class="card-img-top max-width" src="img/${data[i].rating}stars.jpg">
-            <div class="d-flex justify-content-start">
-            <div class="rating col-12" data-vote="0">
+<!--            <div class="d-flex justify-content-start">-->
+<!--            <div class="rating col-12" data-vote="0">-->
 
 <!--          <div class="star hidden">-->
 <!--            <span class="full" data-value="0"></span>-->
@@ -75,8 +75,8 @@ function onSuccess(data, status) {
 <!--            <span>/</span>-->
 <!--            <span class="total">5</span>-->
 <!--          </div>-->
-        </div>
-        </div>
+<!--        </div>-->
+<!--        </div>-->
         </div>
         <div class="card-bottom"><div class="card-text"><p class="">${data[i].plot}</p>
  
@@ -133,7 +133,7 @@ function onSuccess(data, status) {
             $('#editRatingNumber').val(allMovies[editID].rating)
             $('#editID').val(allMovies[editID].id)
             $('#editGenres').val(allMovies[editID].genre)
-            $('#editPoster').html("<img class='col-12' src='" + allMovies[editID].poster + "'>")
+            $('#editPoster').html("<img class='' src='" + allMovies[editID].poster + "'>")
             $('#editPosterURL').val(allMovies[editID].poster)
     })
     // This code was to implement animated stars - but we didn't quite get to it
@@ -254,7 +254,7 @@ function stopLoadingAnimation() {
     $('footer').removeClass('d-none')
 }
 
-
+var posterModal = new bootstrap.Modal(document.getElementById('posterModal'))
 
 $(document).ready(function() {
     $("#add-movie").disabled = true
@@ -263,6 +263,8 @@ $(document).ready(function() {
         .fail(onFail)
         .always(stopLoadingAnimation);
          $('[data-toggle="tooltip"]').tooltip()
+
+
 
 
 
@@ -469,6 +471,7 @@ $("#addMovie").click(function(e) {
             $('.js-average').text((average/ $('.rating').length).toFixed(1))
         }
     })
+    $("#appendTrailersAdd").children().remove();
     })
 
 
@@ -555,11 +558,13 @@ $('#saveChanges').click(function(e) {
 $("#editClose").click(
     function() {
     $("#searchResults").children().remove()
+    $("#appendTrailers").children().remove()
 })
 
 $("#addClose").click(function() {
     console.log($(this))
     $("#addsearchResults").children().remove();
+    $("#appendTrailersAdd").children().remove();
 })
 
 $("#previewEditPoster").click(function () {
@@ -567,16 +572,18 @@ $("#previewEditPoster").click(function () {
 })
 
 $("#previewAddPoster").click(function () {
-    $("#addPoster").html("<img class='col-12' src='" + $("#addPosterURL").val() + "'>")
+    $("#addPoster").html("<img class='card-img-top' src='" + $("#addPosterURL").val() + "'>")
     console.log("Firing from the poster button!")
 })
 
 $("#editCloseTop").click(function () {
     $("#searchResults").children().remove()
+    $("#appendTrailers").children().remove()
 })
 
 $("#addCloseTop").click(function () {
     $("#addsearchResults").children().remove()
+    $("#appendTrailersAdd").children().remove();
 })
 
 // let searchResults
@@ -593,13 +600,14 @@ fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&langua
     if (data.results.length < 1) {
         $("#searchResults").append("<div><h4>Sorry, there were no matches. If you searched using a year, try removing it, or try a different title.</h4></div>")}
     for (let i =0; i < data.results.length; i++) {
-        $("#searchResults").append("<div id=" + data.results[i].id + ">"+ data.results[i].release_date.toString().slice(0,4) + " <img src='https://image.tmdb.org/t/p/w92" + data.results[i].poster_path + "'> " + data.results[i].original_title + "</div>")
+        $("#searchResults").append("<div id=" + data.results[i].id + ">"+ data.results[i].release_date.toString().slice(0,4) + " <img class='' src='https://image.tmdb.org/t/p/w92" + data.results[i].poster_path + "'> " + data.results[i].original_title + "</div>")
     }
     $("#searchResults").children().click(function() {
         console.log($(this).attr("id"))
         fetch("https://api.themoviedb.org/3/movie/" + $(this).attr("id") + "?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
             console.log(data)
             movieDetails = data
+            $("#appendTrailers").children().remove()
             $("#editGenres").val(function() {
                 genres = []
                 for (let i = 0; i < data.genres.length; i++) {
@@ -637,6 +645,7 @@ fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&langua
                 })
             }).catch(error => console.log(error))
 
+            getVideos($(this).attr("id"),$("#appendTrailers"))
             })
 }).catch(error => console.log(error))
 
@@ -644,7 +653,8 @@ fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&langua
 })
 
 $("#addCheckOMDB").click(function() {
-    $("#addsearchResults").children().remove()
+    $("#addsearchResults").children().remove();
+
     fetch("https://api.themoviedb.org/3/search/movie?api_key=" + omdbV3key +"&language=en-US&query=" + $("#addTitle").val() + "&page=1&include_adult=false&year=" + $("#addYear").val()).then(data => data.json()).then(data => {
 
         console.log(data);
@@ -674,9 +684,11 @@ $("#addCheckOMDB").click(function() {
                 $("#addTitle").val(data.title)
                 $("#addPlot").val(data.overview)
                 $("#addPosterURL").val("https://image.tmdb.org/t/p/w300" + data.poster_path)
-                $("#addPoster").html("<img src='" + $("#addPosterURL").val() + "'>");
+                $("#addPoster").html("<img class='' src='" + $("#addPosterURL").val() + "'>");
                 $("#addYear").val(data.release_date.toString().slice(0,4))
             }).catch(error => console.log(error))
+
+            $("#appendTrailersAdd").children().remove();
 
             fetch("https://api.themoviedb.org/3/movie/" + $(this).attr("id") + "/credits?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
                 console.log(data);
@@ -700,6 +712,8 @@ $("#addCheckOMDB").click(function() {
                     console.log("The directors I found for this movie are: " + directors)
                 })
             })
+            $("#appendTrailersAdd").children().remove()
+            getVideos($(this).attr("id"),$("#appendTrailersAdd"))
 
         })
     })
@@ -712,11 +726,27 @@ $("#addCheckOMDB").click(function() {
     // https://api.themoviedb.org/3/movie/<movie id>/credits?api_key=ba6d2ad3567702f5ab135da63fe57a78&language=en-US
 
 // https://api.themoviedb.org/3/movie/<movie ID>/images?api_key=<api key>&language=en-US
+let movieTrailers
 
-function getImages(movieID) {
-    fetch("https://api.themoviedb.org/3/movie/" + movieID + "/images?api_key=" + ombdV4key + "&language=en-US").then(data => {
-        // data.json()).then(data => {
+function getVideos(movieID,appendTo) {
+    fetch("https://api.themoviedb.org/3/movie/" + movieID + "/videos?api_key=" + omdbV3key + "&language=en-US").then(data => data.json()).then(data => {
         console.log(data);
+        console.log("I'm firing from the getVideos function");
+        movieTrailers = data;
+        if (data.results.length < 1) {
+        appendTo.append("<div><h4>Sorry, there were no movie trailers available for this title.</h4></div>")}
+        appendTo.append("<div><h4>The following trailers were found for this title:</h4></div>")
+        for (let i =0; i < data.results.length; i++) {
+            appendTo.append("<div id='" + data.results[i].key + "'>"+ data.results[i].name +  "</div>")
+        }
+        appendTo.append("<div></div>")
+        // let key = $(this).attr("id")
+        appendTo.children().click(function() {
+            console.log($(this).attr("id"))
+            // console.log(key)
+        appendTo.children().last().remove()
+        appendTo.append('<div class="col-12 ratio ratio-16x9"><iframe class="" src="https://www.youtube.com/embed/'+ $(this).attr("id") + '" allowfullscreen></iframe></div>')
+        })
     })
 }
 

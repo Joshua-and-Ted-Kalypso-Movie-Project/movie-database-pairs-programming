@@ -1,3 +1,7 @@
+.modal {
+    background: white;
+}
+
 .poster {
     /*max-width: 275px;*/
     /*max-height: 408px;*/
@@ -11,6 +15,11 @@
 .max-width {
     max-width: 135px;
 }
+
+/*iframe {*/
+/*    width:100%;*/
+/*    height:100%*/
+/*}*/
 
 .card {
     box-shadow: whitesmoke;
@@ -26,15 +35,20 @@
     /*background: blue;*/
 }
 
-#searchResults>div:hover {
+#searchResults>div:hover, #addsearchResults>div:hover, #appendTrailersAdd>div:hover, #appendTrailers>div:hover {
     font-weight: bolder;
     background-color: white;
 }
 
-#addsearchResults>div:hover {
-    font-weight: bolder;
-    background-color: white;
-}
+/*#addsearchResults>div:hover {*/
+/*    font-weight: bolder;*/
+/*    background-color: white;*/
+/*}*/
+
+/*#appendTrailersAdd>div:hover {*/
+/*    font-weight: bolder;*/
+/*    background-color: white;*/
+/*}*/
 
 .loading__anim {
     width: 135px;
