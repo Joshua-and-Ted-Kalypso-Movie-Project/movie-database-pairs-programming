@@ -1,5 +1,7 @@
-.modal {
-    background: white;
+.modal-content {
+    background: rgba(255,255,255,0.7);
+    /*background-image: rgba(0,0,0,0.7);*/
+
 }
 
 .poster {
