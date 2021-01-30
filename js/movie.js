@@ -21,7 +21,25 @@ function onSuccess(data, status) {
         <img class="card-img-top poster ratio ratio-4x3" src="${data[i].poster}"><br>
         <h3 class="card-title">${data[i].title} - 
         <small class="text-muted"> ${data[i].year} </small></h3>
-              <img class="card-img-top max-width" src="img/${data[i].rating}stars.jpg">
+              // <img class="card-img-top max-width" src="img/${data[i].rating}stars.jpg">
+              <div class="rating">
+
+    <!-- 1ST BUTTONS-->
+    <input type="radio" name="rating${i}" id="${i}r5" value="5">
+    <label for="${i}r5"></label>
+    <!-- 2ST BUTTONS-->
+    <input type="radio" name="rating${i}" id="${i}r4" value="4">
+    <label for="${i}r4"></label>
+    <!-- 3ST BUTTONS-->
+    <input type="radio" name="rating${i}" id="r3${i}" value="3">
+    <label for="${i}r3"></label>
+    <!-- 4ST BUTTONS-->
+    <input type="radio" name="rating${i}" id="r2${i}" value="2">
+    <label for=${i}"r2"></label>
+    <!-- 5ST BUTTONS-->
+    <input type="radio" name="rating${i}" id="r1${i}" value="1">
+    <label for="${i}r1"></label>
+</div>
 <!--            <div class="d-flex justify-content-start">-->
 <!--            <div class="rating col-12" data-vote="0">-->
 
